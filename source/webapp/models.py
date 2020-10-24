@@ -18,3 +18,8 @@ class Photo(models.Model):
         verbose_name_plural = 'Фотографии'
 
 
+class Favorite(models.Model):
+    photo = models.ForeignKey('webapp.Photo', on_delete=models.CASCADE,
+                                verbose_name='избраное', related_name='in_favorite')
+
+

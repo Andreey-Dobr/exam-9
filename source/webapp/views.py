@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.base import View
 
-from webapp.forms import PhotoForm
-from webapp.models import Photo
+from accounts.models import Profile
+from webapp.forms import PhotoForm, FavoriteAddForm
+from webapp.models import Photo, Favorite
 
 
 class PhotoListView(ListView):
@@ -58,9 +60,6 @@ class PhotoUpdateView(PermissionRequiredMixin, UpdateView):
         return super().has_permission() or article.author == self.request.user
 
 
-
-
-
 class Delete_Photo(UserPassesTestMixin, DeleteView):
     template_name = 'photo/del_photo.html'
     model = Photo
@@ -70,3 +69,41 @@ class Delete_Photo(UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.request.user.has_perm('webapp.del_photo') or \
                self.get_object().author == self.request.user
+
+
+class FavoriteView(CreateView):
+    model = Favorite
+    form_class = FavoriteAddForm
+
+    def post(self, request, *args, **kwargs):
+        self.photo = get_object_or_404(Photo, pk=self.kwargs.get('pk'))
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        try:
+            cart_product = Favorite.objects.get(product=self.photo, pk__in=self.get_cart_ids())
+
+            cart_product.save()
+        except Favorite.DoesNotExist:
+            cart_product = Favorite.objects.create(product=self.photo)
+            self.save_to_session(cart_product)
+
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        if next:
+            return next
+        return reverse('webapp:index')
+
+    def get_cart_ids(self):
+        return self.request.session.get('cart_ids', [])
+
+    def save_to_session(self, cart_product):
+        cart_ids = self.request.session.get('cart_ids', [])
+        if cart_product.pk not in cart_ids:
+            cart_ids.append(cart_product.pk)
+        self.request.session['cart_ids'] = cart_ids
+
