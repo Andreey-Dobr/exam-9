@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -26,10 +27,14 @@ class PhotoDetail(DetailView):
     template_name = 'photo/photo_detail.html'
     model = Photo
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 
-class PhotoCreate(CreateView):
+
+class PhotoCreate(LoginRequiredMixin, CreateView):
     template_name = 'photo/create.html'
     form_class = PhotoForm
     model = Photo
@@ -42,23 +47,21 @@ class PhotoCreate(CreateView):
         return reverse('webapp:photo_detail', kwargs={'pk': self.object.pk})
 
 
-class PhotoUpdateView(UpdateView):
+class PhotoUpdateView(PermissionRequiredMixin, UpdateView):
     model = Photo
     template_name = 'photo/update.html'
     form_class = PhotoForm
-    #permission_required = 'webapp.change_project'
+    permission_required = 'webapp.change_project'
+
+    def has_permission(self):
+        article = self.get_object()
+        return super().has_permission() or article.author == self.request.user
 
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #context['users'] = User
-        return context
-
-    def get_success_url(self):
-        return reverse('photo_detail', kwargs={'pk': self.object.pk})
 
 
-class Delete_Photo(DeleteView):
+
+class Delete_Photo(UserPassesTestMixin, DeleteView):
     template_name = 'photo/del_photo.html'
     model = Photo
     context_key = 'photo'

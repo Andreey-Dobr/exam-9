@@ -16,3 +16,5 @@ class Photo(models.Model):
     class Meta:
         verbose_name = 'Фото'
         verbose_name_plural = 'Фотографии'
+
+

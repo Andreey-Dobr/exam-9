@@ -66,6 +66,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 
+
+
 class UserChangeView(UserPassesTestMixin, UpdateView):
     model = get_user_model()
     form_class = UserChangeForm

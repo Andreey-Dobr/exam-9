@@ -4,8 +4,8 @@
 
 {% block menu %}
 
-    <li><a  href="#">Delete project</a></li>
-    <li><a  href="#">add task</a></li>
+    <li><a  href={% url "webapp:del" photo.pk %}>Delete post</a></li>
+    <li><a  href="{% url "webapp:photo_update" photo.pk %}">update </a></li>
 
 {% endblock %}
 
@@ -15,6 +15,24 @@
     <p>Подпись:<br> {{ photo.label }}</p>
     <p><span style="color: #008080; font-size: 20px">{{ photo.author }}</span></p>
     <p>{{ photo.created_at }}</p>
+
+
+    <h3>В избраном у:</h3>
+           {% for favorites in photo.favorites.all %}
+
+
+               <a href="{% url 'accounts:detail' favorites.pk %}">
+                        {{ favorites.user }}
+                    </a>
+
+            <hr>
+
+
+        {% empty %}
+
+            <p>вы можете стать первым кто добавит в избраное</p>
+
+        {% endfor %}
 
 
 

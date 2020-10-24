@@ -46,6 +46,7 @@ class Profile(models.Model):
                                               on_delete=models.CASCADE, verbose_name='Пользователь')
     birth_date = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
     avatar = models.ImageField(null=True, blank=True, upload_to='user_pics', verbose_name='Аватар')
+    photos = models.ManyToManyField('webapp.Photo', related_name='favorites', blank=True, verbose_name='Избраное')
 
     def __str__(self):
         return self.user.get_full_name() + "'s Profile"
