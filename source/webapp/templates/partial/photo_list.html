@@ -1,0 +1,26 @@
+{% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
+
+    {% for photo in photos %}
+        <div >
+        <img src="{{ MEDIA_URL }}{{ photo.photo.url }}" />
+        <h1 style="text-transform: capitalize ;"><a style="text-decoration: none;text-transform: uppercase;color:
+        #6a7dff" href="#"> <span style="color: #20B2AA">{{ photo.label }}</span> </a></h1>
+        <p><span style="color: #008080; font-size: 20px">{{ photo.id }}</span></p>
+
+
+            <tr>
+
+            <td><a style="text-decoration: none;text-transform: uppercase;color:
+        #6a7dff" href="#">update </a></td>
+
+            </tr>
+
+
+
+    </div>
+    {% endfor %}
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}

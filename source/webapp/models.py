@@ -10,4 +10,9 @@ class Photo(models.Model):
     author = models.ForeignKey(get_user_model(), null=False, on_delete=models.SET_DEFAULT, default=1,
                                related_name='photos', verbose_name='Автор')
 
+    def __str__(self):
+        return "{}. {}".format(self.pk, self.label)
 
+    class Meta:
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фотографии'
