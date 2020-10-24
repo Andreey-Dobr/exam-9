@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from webapp.forms import PhotoForm
 from webapp.models import Photo
@@ -56,3 +56,14 @@ class PhotoUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('photo_detail', kwargs={'pk': self.object.pk})
+
+
+class Delete_Photo(DeleteView):
+    template_name = 'photo/del_photo.html'
+    model = Photo
+    context_key = 'photo'
+    success_url = reverse_lazy('index')
+
+    def test_func(self):
+        return self.request.user.has_perm('webapp.del_task') or \
+               self.get_object().author == self.request.user
