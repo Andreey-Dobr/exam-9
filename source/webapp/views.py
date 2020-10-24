@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from webapp.forms import PhotoForm
 from webapp.models import Photo
@@ -37,6 +37,22 @@ class PhotoCreate(CreateView):
     #def form_valid(self, form):
     #    form.instance.author = self.request.user
     #    return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('photo_detail', kwargs={'pk': self.object.pk})
+
+
+class PhotoUpdateView(UpdateView):
+    model = Photo
+    template_name = 'photo/update.html'
+    form_class = PhotoForm
+    #permission_required = 'webapp.change_project'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #context['users'] = User
+        return context
 
     def get_success_url(self):
         return reverse('photo_detail', kwargs={'pk': self.object.pk})
