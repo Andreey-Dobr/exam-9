@@ -18,10 +18,15 @@
     <nav class="navbar">
         <div class="container">
             <ul class="menu">
-                <li><a href="{% url "index" %}">Home</a></li>
-                <li><a href="{% url "photo_create" %}">Add Post</a></li>
+                <li><a href="{% url 'webapp:index' %}">Home</a></li>
+                <li><a href="{% url "webapp:photo_create" %}">Add Post</a></li>
 
                 {% block auth_menu %}
+                    <li><a href="{% url 'accounts:detail' request.user.pk %}">
+                        Привет, {{ request.user.get_full_name|default:request.user.username }}
+                    </a></li>
+
+
                     {% if request.user.is_authenticated %}
                         <li><a href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">Logout</a></li>
                     {% else %}

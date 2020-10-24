@@ -39,7 +39,7 @@ class PhotoCreate(CreateView):
     #    return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('photo_detail', kwargs={'pk': self.object.pk})
+        return reverse('webapp:photo_detail', kwargs={'pk': self.object.pk})
 
 
 class PhotoUpdateView(UpdateView):
@@ -62,8 +62,8 @@ class Delete_Photo(DeleteView):
     template_name = 'photo/del_photo.html'
     model = Photo
     context_key = 'photo'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('webapp:index')
 
     def test_func(self):
-        return self.request.user.has_perm('webapp.del_task') or \
+        return self.request.user.has_perm('webapp.del_photo') or \
                self.get_object().author == self.request.user

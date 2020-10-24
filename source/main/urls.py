@@ -18,8 +18,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
-from webapp.views import PhotoListView, PhotoDetail, PhotoCreate, PhotoUpdateView,\
-Delete_Photo
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,10 +26,7 @@ urlpatterns = [
     path('', include('webapp.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include('api.urls')),
+    path('photo/', include('webapp.urls')),
 
-    path('', PhotoListView.as_view(), name='index'),
-    path('photo/<int:pk>/', PhotoDetail.as_view(), name='photo_detail'),
-    path('photo/<int:pk>/update', PhotoUpdateView.as_view(), name='photo_update'),
-    path('photo/<int:pk>/del/', Delete_Photo.as_view(), name='del'),
-    path('photo/create/', PhotoCreate.as_view(), name='photo_create'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
