@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Project List{% endblock %}
+
+{% block menu %}
+
+    <li><a  href="#">Delete project</a></li>
+    <li><a  href="#">add task</a></li>
+
+{% endblock %}
+
+{% block content %}
+    <h1>Фото</h1>
+    <img src="{{ MEDIA_URL }}{{ photo.photo.url }}" />
+    <p>Подпись:<br> {{ photo.label }}</p>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

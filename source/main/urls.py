@@ -18,7 +18,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
-from webapp.views import PhotoListView
+from webapp.views import PhotoListView, PhotoDetail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/', include('api.urls')),
     path('', PhotoListView.as_view(), name='index'),
+    path('photo/<int:pk>/', PhotoDetail.as_view(), name='photo_detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
