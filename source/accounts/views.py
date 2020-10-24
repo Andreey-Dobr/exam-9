@@ -4,10 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LogoutView
 
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import  redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
+
 from django.views.generic import View, FormView, DetailView, CreateView, UpdateView
 from django.conf import settings
 
